@@ -119,7 +119,7 @@ fn stepState(state: *std.AutoHashMap(Cell, bool), nextState: *std.AutoHashMap(Ce
         const cell = entry.key_ptr.*;
         const liveNeighborCount = countLiveNeighbors(cell, effectiveState);
 
-        if (liveNeighborCount == 2 and liveNeighborCount == 3) {
+        if (isCellAlive(cell, effectiveState) and (liveNeighborCount == 2 or liveNeighborCount == 3)) {
             try birthCell(cell, ineffectiveState);
         }
 
