@@ -38,6 +38,8 @@ pub fn main(init: std.process.Init) !void {
     while (!rl.windowShouldClose()) {
         const effectiveState = if (swap) &nextState else &state;
         const scroll = rl.getMouseWheelMove();
+        const mousePos = rl.getMousePosition();
+        const oldCam = cam;
 
         if (scroll > 0) {
             cam.zoom *= 1.1;
@@ -45,12 +47,20 @@ pub fn main(init: std.process.Init) !void {
             cam.zoom *= 0.9;
         }
 
+        if (scroll != 0) {
+            const oldWorldMousePos = rl.getScreenToWorld2D(mousePos, oldCam);
+            const worldMousePos = rl.getScreenToWorld2D(mousePos, cam);
+            const dx = oldWorldMousePos.x - worldMousePos.x;
+            const dy = oldWorldMousePos.y - worldMousePos.y;
+            cam.target.x += dx;
+            cam.target.y += dy;
+        }
+
         if (rl.isKeyPressed(.space)) {
             try stepState(&state, &nextState, &swap);
         }
 
         if (rl.isMouseButtonPressed(.left)) {
-            const mousePos = rl.getMousePosition();
             const cell = getMousePosToCell(mousePos, cam);
             try birthCell(cell, effectiveState);
         }
