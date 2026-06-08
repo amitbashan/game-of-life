@@ -28,10 +28,6 @@ pub fn main(init: std.process.Init) !void {
 
     var swap = false;
 
-    try state.put(Cell{ .x = 3, .y = 4 }, true);
-    try state.put(Cell{ .x = 3, .y = 5 }, true);
-    try state.put(Cell{ .x = 2, .y = 3 }, true);
-
     var cam = rl.Camera2D{
         .offset = .{ .x = 0, .y = 0 },
         .target = .{ .x = 0, .y = 0 },
